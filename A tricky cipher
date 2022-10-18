@@ -1,0 +1,89 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <iterator>
+
+
+
+using namespace std;
+
+
+
+int main()
+{
+	int itog,x=0;
+	char FirstN;
+	int sum =0, k;
+	string birthD;
+	int birth;
+	set <char> myset = {};
+	int size = 0;
+	ifstream in("text.txt");
+	string str;
+
+	getline(in, str);
+	getline(in, str);
+	in.close(); 
+
+	for (int i = 0; i < str.length(); i++) {
+		if (str[i] >= 'A' && str[i] <= 'Z' || str[i] >= 'a' && str[i] <= 'z') {
+			if (myset.find(str[i]) == myset.end()) {
+				myset.insert(str[i]);
+			}
+		}
+	}
+	size = myset.size();
+
+	myset.clear();
+	for (int i = 0; i < str.length(); i++) {
+		if (str[i] >= '0' && str[i] <= '9') {
+			birthD += str[i];
+		}
+	}
+	
+	birth = stoi(birthD);
+	
+	for(int i =0; i<8;i++) {
+		k = birth % 10;
+		birth /= 10;
+		if (i >= 4) {
+			sum = sum + k;
+		}
+	}
+
+	FirstN = str[0];
+
+	int symbol_number = (int(FirstN) - 64);
+	
+	itog = size + (sum * 64) + (symbol_number * 256);
+
+	int digit;
+	string hexadec = "";
+	char hex[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
+	   
+	while (itog > 0)
+	{
+		digit = itog % 16;
+		hexadec = hex[digit] + hexadec;
+		itog = itog / 16;
+	}
+
+	int r = hexadec.length();
+
+
+	if (r > 3) {
+		hexadec.erase(0,1);
+	}
+	else {
+		while (r == 3) {
+			hexadec.insert(0, "0");
+		}
+	}
+	
+	cout << hexadec << '\n';
+
+	return 0;
+}
